@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -8,20 +7,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Vector3 _spawnPosition;
     [SerializeField] private float _delay;
     [SerializeField] private Pool _pool;
-    private List<Cube> _cubes = new List<Cube>();
-
-    private void OnEnable()
-    {
-        foreach (Cube cube in _cubes)
-            cube.LifeTimer.CubeDied += Release;
-    }
-
-    private void OnDisable()
-    {
-        foreach (Cube cube in _cubes)
-            cube.LifeTimer.CubeDied -= Release;
-    }
-
+    
     private void Start()
     {
         StartCoroutine(SpawnTimer(_delay));
@@ -29,8 +15,7 @@ public class Spawner : MonoBehaviour
 
     private void Release(Cube cube)
     {
-        cube.LifeTimer.CubeDied -= Release;
-        _cubes.Remove(cube);
+        cube.CubeDied -= Release;
         _pool.Release(cube);     
     }
 
@@ -41,8 +26,7 @@ public class Spawner : MonoBehaviour
         Vector3 newPosition = _spawnPosition + Random.insideUnitSphere * _maxRadius;
 
         cube.Init( newPosition);
-        cube.LifeTimer.CubeDied += Release;
-        _cubes.Add(cube);   
+        cube.CubeDied += Release;
     }
 
     private IEnumerator SpawnTimer(float delay)

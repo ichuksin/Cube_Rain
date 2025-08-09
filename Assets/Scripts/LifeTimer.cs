@@ -5,12 +5,12 @@ using UnityEngine;
 public class LifeTimer : MonoBehaviour
 {
     [SerializeField] private ContactDetector _contactDetector;
-    [SerializeField] private Cube _cube;
 
     private float _minLifeTime = 2.0f;
     private float _maxLifeTime = 5.0f;
 
-    public event Action<Cube> CubeDied;
+    public event Action TimerEnded;
+    
     private void OnEnable()
     {
         _contactDetector.PlatformContacted += StartTimer;
@@ -24,19 +24,14 @@ public class LifeTimer : MonoBehaviour
     private void StartTimer()
     {
         float delay = UnityEngine.Random.Range(_minLifeTime, _maxLifeTime);
-        StartCoroutine(Timer(delay));
+        StartCoroutine(CountDownTime(delay));
     }
 
-    private IEnumerator Timer(float delay) 
+    private IEnumerator CountDownTime(float delay) 
     { 
         var wait = new WaitForSeconds(delay);
         yield return wait;
-        CubeDied?.Invoke(_cube);
-        Die();
+        TimerEnded?.Invoke();
         yield break;
-    }
-    private void Die()
-    {
-        gameObject.SetActive(false);    
     }
 }
