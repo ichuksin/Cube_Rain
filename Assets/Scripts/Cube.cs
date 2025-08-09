@@ -1,23 +1,20 @@
+using System;
+
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Cube : MonoBehaviour
 {
     [SerializeField] private CubeRenderer _cubeRenderer;
+    [SerializeField] private LifeTimer _lifeTimer;
 
     public CubeRenderer CubeRenderer => _cubeRenderer;
+    public LifeTimer LifeTimer => _lifeTimer;
 
-    public event UnityAction<Cube> Died;
     
     public void Init(Vector3 position)
     {
         transform.position = position;
         Enable();
-    }
-
-    private void OnDisable()
-    {
-        Died?.Invoke(this);
     }
 
     private void Enable()

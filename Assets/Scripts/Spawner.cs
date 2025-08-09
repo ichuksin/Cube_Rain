@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,23 +13,23 @@ public class Spawner : MonoBehaviour
     private void OnEnable()
     {
         foreach (Cube cube in _cubes)
-            cube.Died += Release;
+            cube.LifeTimer.CubeDied += Release;
     }
 
     private void OnDisable()
     {
         foreach (Cube cube in _cubes)
-            cube.Died -= Release;
+            cube.LifeTimer.CubeDied -= Release;
     }
 
     private void Start()
     {
-        InvokeRepeating (nameof(Spawn), _delay, _delay);
+        StartCoroutine(SpawnTimer(_delay));
     }
 
     private void Release(Cube cube)
     {
-        cube.Died -= Release;
+        cube.LifeTimer.CubeDied -= Release;
         _cubes.Remove(cube);
         _pool.Release(cube);     
     }
@@ -40,7 +41,17 @@ public class Spawner : MonoBehaviour
         Vector3 newPosition = _spawnPosition + Random.insideUnitSphere * _maxRadius;
 
         cube.Init( newPosition);
-        cube.Died += Release;
+        cube.LifeTimer.CubeDied += Release;
         _cubes.Add(cube);   
+    }
+
+    private IEnumerator SpawnTimer(float delay)
+    {
+        var wait = new WaitForSeconds(delay);
+        while (enabled)
+        {
+            Spawn();
+            yield  return wait;
+        }
     }
 }

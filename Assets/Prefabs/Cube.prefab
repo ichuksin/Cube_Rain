@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cubeRenderer: {fileID: 2679575955577063338}
+  _lifeTimer: {fileID: 1654576252818158544}
 --- !u!114 &2679575955577063338
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,12 +12,12 @@ public class CubeRenderer : MonoBehaviour
     private void OnEnable()
     {
         Init();
-        _contactDetector.Contacted += ChangeMaterial;
+        _contactDetector.PlatformContacted += ChangeMaterial;
     }
 
     private void OnDisable()
     {
-        _contactDetector.Contacted -= ChangeMaterial;
+        _contactDetector.PlatformContacted -= ChangeMaterial;
     }
 
     private void Init()
@@ -33,6 +33,6 @@ public class CubeRenderer : MonoBehaviour
             _renderer.material = _colorer.GetMaterial();
             _isColorChanged = true;
         }
-        _contactDetector.Contacted -= ChangeMaterial;
+        _contactDetector.PlatformContacted -= ChangeMaterial;
     }
 }
